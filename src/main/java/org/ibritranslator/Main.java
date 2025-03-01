@@ -4,11 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.InputStream;
 
 public class Main extends JFrame {
     // ГЛОБАЛЬНЫЕ ЦВЕТА
     public static final Color PRIMARY_COLOR = new Color(0x000000); // Черный
     public static final Color ACCENT_COLOR = new Color(0xFFD7D7);  // Белый с розовым оттенком
+
+    // Размер шрифта
+    public static final int FONT_SIZE = 24; // Уменьшили размер шрифта
 
     private JComboBox<String> inputLanguageComboBox;
     private JComboBox<String> outputLanguageComboBox;
@@ -26,6 +30,9 @@ public class Main extends JFrame {
         int height = (int) (screenSize.height * 0.75);
         setSize(width, height);
         setLocation(screenSize.width - width, 0);
+
+        // Загрузка шрифта Arsenal SC
+        Font arsenalFont = loadFont("ArsenalSC-Regular.ttf", FONT_SIZE);
 
         // Компоненты
         inputLanguageComboBox = new JComboBox<>(new String[]{"English", "Russian"});
@@ -75,9 +82,11 @@ public class Main extends JFrame {
         middlePanel.setBackground(PRIMARY_COLOR);
         inputTextField.setBackground(PRIMARY_COLOR);
         inputTextField.setForeground(ACCENT_COLOR);
+        inputTextField.setFont(arsenalFont);
         inputTextField.setBorder(BorderFactory.createEmptyBorder()); // Убираем границу
         outputTextArea.setBackground(PRIMARY_COLOR);
         outputTextArea.setForeground(ACCENT_COLOR);
+        outputTextArea.setFont(arsenalFont);
         outputTextArea.setBorder(BorderFactory.createEmptyBorder()); // Убираем границу
         middlePanel.add(inputTextField);
         middlePanel.add(new JScrollPane(outputTextArea));
@@ -87,9 +96,11 @@ public class Main extends JFrame {
         bottomPanel.setBackground(PRIMARY_COLOR);
         notesTextArea.setBackground(PRIMARY_COLOR);
         notesTextArea.setForeground(ACCENT_COLOR);
+        notesTextArea.setFont(arsenalFont);
         notesTextArea.setBorder(BorderFactory.createEmptyBorder()); // Убираем границу
         descriptionTextArea.setBackground(PRIMARY_COLOR);
         descriptionTextArea.setForeground(ACCENT_COLOR);
+        descriptionTextArea.setFont(arsenalFont);
         descriptionTextArea.setBorder(BorderFactory.createEmptyBorder()); // Убираем границу
         bottomPanel.add(new JScrollPane(notesTextArea));
         bottomPanel.add(new JScrollPane(descriptionTextArea));
@@ -117,7 +128,7 @@ public class Main extends JFrame {
         setForeground(ACCENT_COLOR);
         setBackground(PRIMARY_COLOR);
         setUndecorated(false); // Убираем стандартную рамку, если нужно
-        pack();
+        pack(); // Используем pack() для автоматической подгонки размеров окна
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
@@ -183,6 +194,16 @@ public class Main extends JFrame {
             int y = getHeight() / 2 - 4;
             g2d.fillPolygon(new int[]{x, x + 8, x + 4}, new int[]{y, y, y + 8}, 3);
             g2d.dispose();
+        }
+    }
+
+    // Метод для загрузки шрифта из файла
+    private Font loadFont(String fontPath, int fontSize) {
+        try (InputStream is = getClass().getResourceAsStream("/" + fontPath)) {
+            return Font.createFont(Font.TRUETYPE_FONT, is).deriveFont((float) fontSize);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Font("Arial", Font.PLAIN, fontSize);
         }
     }
 
