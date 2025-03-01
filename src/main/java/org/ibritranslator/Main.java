@@ -16,21 +16,19 @@ public class Main extends JFrame {
     public Main() {
         setTitle("IBRI Translator");
 
-        // Получаем размеры экрана
+        // Размеры окна
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = screenSize.width / 2; // Половина ширины экрана
-        int height = (int) (screenSize.height * 0.75); // Три четверти высоты экрана
-
-        // Устанавливаем размеры и позицию окна
+        int width = screenSize.width / 2;
+        int height = (int) (screenSize.height * 0.75);
         setSize(width, height);
-        setLocation(screenSize.width - width, 0); // Правый верхний угол
+        setLocation(screenSize.width - width, 0);
 
         // Компоненты
         inputLanguageComboBox = new JComboBox<>(new String[]{"English", "Russian"});
         outputLanguageComboBox = new JComboBox<>(new String[]{"English", "Russian"});
         JButton menuButton = createMenuButton();
-        inputTextField = new JTextField(20); // Начальная ширина текстового поля
-        outputTextArea = new JTextArea(10, 30); // Начальные размеры текстового поля
+        inputTextField = new JTextField(20); // Левое поле ввода
+        outputTextArea = new JTextArea(10, 30); // Правое поле вывода
         notesTextArea = new JTextArea(10, 30);
         descriptionTextArea = new JTextArea(10, 30);
 
@@ -43,7 +41,7 @@ public class Main extends JFrame {
         JPanel topPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        // Кнопка меню (30x30)
+        // Кнопка меню
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.ipadx = 0;
@@ -52,7 +50,7 @@ public class Main extends JFrame {
         gbc.fill = GridBagConstraints.NONE;
         topPanel.add(menuButton, gbc);
 
-        // Левый комбобокс (автоматическая ширина)
+        // Левый комбобокс
         gbc.gridx = 1;
         gbc.weightx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -62,8 +60,10 @@ public class Main extends JFrame {
         gbc.gridx = 2;
         gbc.weightx = 0;
         gbc.fill = GridBagConstraints.NONE;
-        outputLanguageComboBox.setPreferredSize(new Dimension(inputTextField.getPreferredSize().width,
-                outputLanguageComboBox.getPreferredSize().height));
+        outputLanguageComboBox.setPreferredSize(new Dimension(
+                outputTextArea.getPreferredSize().width, // Теперь берем ширину правого поля
+                outputLanguageComboBox.getPreferredSize().height
+        ));
         topPanel.add(outputLanguageComboBox, gbc);
 
         // Центральная панель
@@ -82,18 +82,20 @@ public class Main extends JFrame {
         add(middlePanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
 
-        // Автоподстройка правого комбобокса
-        inputTextField.addComponentListener(new ComponentAdapter() {
+        // Автоподстройка правого комбобокса при изменении размера окна
+        outputTextArea.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                outputLanguageComboBox.setPreferredSize(new Dimension(inputTextField.getWidth(),
-                        outputLanguageComboBox.getPreferredSize().height));
+                outputLanguageComboBox.setPreferredSize(new Dimension(
+                        outputTextArea.getWidth(),
+                        outputLanguageComboBox.getPreferredSize().height
+                ));
                 revalidate();
                 repaint();
             }
         });
 
-        // Убедимся, что окно правильно масштабируется
+        // Исправление размеров компонентов
         pack();
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
