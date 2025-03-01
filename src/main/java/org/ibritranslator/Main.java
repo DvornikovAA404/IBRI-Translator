@@ -13,8 +13,18 @@ public class Main extends JFrame {
 
     public Main() {
         setTitle("IBRI Translator");
-        setSize(Toolkit.getDefaultToolkit().getScreenSize().width / 4, Toolkit.getDefaultToolkit().getScreenSize().height / 4);
-        setLocationRelativeTo(null); // Центрирование окна на экране
+
+        // Получаем размеры экрана
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
+        // Устанавливаем размеры окна (половина ширины и половина высоты экрана)
+        setSize(screenWidth / 2, screenHeight / 2);
+
+        // Устанавливаем позицию окна в правой верхней части экрана
+        setLocation(screenWidth - getWidth(), 0);
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Создание компонентов
